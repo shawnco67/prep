@@ -2,6 +2,8 @@
 
 Code for the course
 
+## If you run into issues, please contact me at jp@developwithpassion.com
+
 ## Whenever asked to open a mingw terminal, complete the following:
 
 1. Open up mingw by double clicking on the bat file at this location: C:\utils\mingw\msys\1.0\msys.bat
