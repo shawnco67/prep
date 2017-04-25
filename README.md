@@ -1,6 +1,6 @@
 # Code
 
-Code for the week
+Code for the course
 
 ## Whenever asked to open a mingw terminal, complete the following:
 
@@ -20,8 +20,9 @@ cd /c/course/prep
 ./x.bootstrap
 ```
 3. Make changes to the file that was just created for you in "settings/[your_user_name].settings
-  * You will definitely need to change the git:user setting
-  * Only change the value for the git:user key. Don't copy my settings file (settings/jp.settings) as the extra key that I am using (provider) will mess up your configuration
+
+* You will definitely need to change the git:user setting
+* Only change the value for the git:user key. Don't copy my settings file (settings/jp.settings) as the extra key that I am using (provider) will mess up your configuration
 
 4. Repeat steps 1 and 2
 
