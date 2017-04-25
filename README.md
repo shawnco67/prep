@@ -2,7 +2,7 @@
 
 Code for the course
 
-## If you run into issues, please contact me at jp@developwithpassion.com
+## If you run into issues following this setup, please contact me at jp@developwithpassion.com
 
 ## Whenever asked to open a mingw terminal, complete the following:
 
