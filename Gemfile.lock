@@ -1,0 +1,46 @@
+GIT
+  remote: https://github.com/developwithpassion/initializer
+  revision: 8d0a534d53077894b8fc58fc38d218c46fa19449
+  specs:
+    initializer (0.0.3)
+      extension
+
+GIT
+  remote: https://github.com/developwithpassion/settings
+  revision: b352fe2672619c7769955d68c4cb50e79af600f5
+  specs:
+    settings (0.0.3)
+
+GIT
+  remote: https://github.com/developwithpassion/single
+  revision: bf347a754d9268618cb6f631231e7f61340526a7
+  specs:
+    single (0.0.4)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    arrayfu (1.0.0)
+    configatron (4.5.1)
+    expansions (0.4.34)
+      arrayfu (>= 1.0.0)
+      configatron (>= 4.1.0)
+      mustache (>= 0.99.5)
+    extension (0.0.2)
+    mustache (1.0.3)
+    rake (12.0.0)
+    thor (0.19.1)
+
+PLATFORMS
+  x64-mingw32
+
+DEPENDENCIES
+  expansions
+  initializer!
+  rake
+  settings!
+  single!
+  thor (= 0.19.1)
+
+BUNDLED WITH
+   1.14.6

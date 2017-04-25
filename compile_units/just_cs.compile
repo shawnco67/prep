@@ -1,0 +1,32 @@
+{
+  name: "code",
+
+  response_file: File.join(settings.response_files_dir,"code.rsp"),
+
+  base_response_template: "source/config/csc.rsp",
+
+  sources: Rake::FileList["source/**/*.cs"]
+          .exclude(/TemporaryGenerated/)
+          .to_a,
+
+  extra_files: [],
+
+  references: settings.all_references.select do |item| 
+           /interop/i !~ item 
+         end,
+
+  assembly: {
+    title: "bx",
+    company: "iQMetrix",
+    product: "bx",
+    copyright: "Copyright © iQMetrix 2017",
+    guid: "96530a97-da3a-4486-af32-894e984fec0d",
+    version: "1.0.0.0"
+  },
+
+  dependent_compiles: [],
+
+  output: File.join(settings.artifacts_dir,"code.dll"),
+
+  target: :library
+}

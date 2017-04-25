@@ -1,0 +1,260 @@
+def filter_libs(libs)
+  libs = libs.select do |file|
+    /x86/ !~ file &&
+      /netstandard/ !~ file &&
+      /SQLite/ !~ file &&
+      /netcore/ !~ file &&
+      /amd64/ !~ file &&
+      /net35/ !~ file &&
+      /net40-client/ !~ file &&
+      /portable/ !~ file &&
+      /sl4/ !~ file &&
+      /sl5/ !~ file &&
+      /Interop/ !~ file &&
+      /content/ !~ file &&
+      /Machine.Fakes.Adap/ !~ file &&
+      /Oracle/ !~ file &&
+      /mono/i !~ file &&
+      /android/i !~ file &&
+      /System\./i !~ file &&
+      /Moq/i !~ file
+  end
+
+  libs
+end
+
+configure({
+  all_references: delayed do
+    settings.framework_references +
+      settings.libs
+  end, 
+
+  app_dir: delayed{"source"},
+
+  artifacts_dir: "artifacts",
+
+  automation: {
+    folders_to_create: delayed{[
+      settings.artifacts_dir,
+      settings.response_files_dir,
+      settings.specs.dir,
+      settings.specs.report_dir,
+    ]},
+
+    folders_to_clean: delayed{[
+      settings.artifacts_dir,
+      settings.web.intermediate_dir,
+      settings.web.staging_dir
+    ]},
+  },
+
+  build_order: [
+    "all"
+  ].select do |unit|
+    "compile_units/#{unit}.compile"
+  end,
+
+  chrome: '/c/utils/chrome/chrome.exe',
+
+  clear_node_packages: true,
+
+  compiler: {
+    warning_level: 1
+  },
+
+  compile_units: Dir.glob("compile_units/*.compile"),
+
+  config_files: dynamic do 
+    Dir.glob([
+      "source/config/**/*.{config,xml}",
+    ])
+  end,
+
+  main_config_file: 'source/config/web.config',
+
+  browser: 'C:\utils\firefox\firefox.exe',
+
+  config_dir: "source/config",
+
+  deploy_to: {
+    server_name: ENV["COMPUTERNAME"],
+    website_name: 'blue_utility',
+    path: nil
+  },
+
+  database: {
+    provider_for_migrations: 'SqlServer2014',
+    name: 'code',
+    connection_string: 'Server=(LocalDB)\code;Integrated Security=true' 
+  },
+
+  edit_project_template: 'source/edit.csproj.template',
+
+  environment:
+  {
+    auto_reload: true
+  },
+
+  paket:
+  {
+    packages_folder: 'packages',
+
+    packages_config: 'source/config/packages.config',
+  },
+
+
+  extra_aliases: [],
+
+  framework_references: [
+    "System.dll",
+  ],
+
+  iis_express: {
+    port: 8080,
+    present: true,
+    enable_in_project_files: true,
+    use_for_deploys: true,
+    path: 'e:\utils\iis_express\iisexpress.exe',
+  },
+
+  libs: delayed do
+    (settings.package_references + 
+     settings.lib_references)
+  end,
+
+  lib_references: delayed do 
+    UniqueFiles.new(filter_libs(Dir.glob("lib/**/*.{dll,exe}"))).all_files
+  end,
+
+  logging: {
+    file_name: delayed{"code_app_log.txt"},
+
+    level: "DEBUG",
+  },
+
+  migrate: {
+    exe: 'packages/FluentMigrator.Tools.1.4.0.0/tools/x86/40/Migrate.exe'
+  },
+
+  net_tools_paths: [
+    '/c/Program Files (x86)',
+    '/c/Program Files (x86)/MSBuild/12.0/bin',
+    '/c/utils/vs/2015/Common7/IDE',
+    '/c/utils/vs/2015/Common7/Tools',
+    '/c/utils/vs/2015/VC/BIN',
+    '/c/Windows/Microsoft.NET/Framework/v4.0.30319',
+    '/c/Program Files (x86)/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1/Tools/x64/',
+    '/c/Program Files (x86)/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools'
+  ],
+
+  package_references: delayed do 
+    UniqueFiles.new(filter_libs(Dir.glob("packages/**/*.{dll,exe}"))).all_files
+  end,
+
+  project: "code",
+
+  git: {
+    presenter: {
+      user: 'trimble-april-2017'
+    },
+
+    provider: 'github', #possible values [github, bitbucket]
+
+    remotes: %w//,
+
+    repo: 'prep' 
+  },
+
+  response_files_dir: delayed do
+    File.join(settings.artifacts_dir, "response_files")
+  end,
+
+  root_namespace: "code",
+
+  runner_processes: delayed{%W/#{settings.browser.base_name_without_extension} iisexpress node ruby powershell growl chrome chromedriver cmd/},
+
+  specs:
+  {
+    exe: delayed{"#{settings.artifacts_dir}/mspec-clr4.exe"},
+
+    is_build_error: -> (message) do
+      [ /error/,
+        /FAIL/ 
+      ].any? do |pattern|
+        pattern =~ message
+      end
+    end,
+
+    continuous_testing: {
+      ignored_files: [
+        /generated/,
+        /assembly(_)?info/i,
+        /obj\/Debug/i,
+        /App_Start/i,
+      ],
+
+      glob: -> {
+        files = Dir.glob("source/**/*.cs")
+        results = files.select do |file|
+          settings.specs.continuous_testing.ignored_files.all? do |pattern|
+            pattern !~ file
+          end
+        end
+      },
+
+      runner: ->(compile_file) do
+        `thor specs:run_them #{compile_file} --flags=exclude:slow,seed`
+      end
+    },
+
+    flags: delayed{
+      {
+        :html => "#{settings.specs.report_dir}/#{settings.project}.specs.html",
+      }
+    },
+
+    assemblies: dynamic{Dir.glob("#{settings.artifacts_dir}/#{settings.project}.*dll")},
+
+    dir: delayed{File.join(settings.artifacts_dir,"specs")},
+
+    report_dir: delayed{File.join(settings.specs.dir,"report")},
+  },
+
+  target: "Debug",
+
+  test_compile_unit: 'compile_units/sample_spec.compile',
+
+  appconfig_settings:  delayed{[
+    { name: "app_name", type: "string", value: 'code' },
+  ]},
+
+  timestamps: {
+
+    verification_file: 'all_timestamps',
+
+    bundles: {
+
+      node_packages: {
+        files: ['source/package.json',
+                'package.json'].concat(
+                  Dir.glob("source/custom_node_modules/**/package.json"))
+          .concat( Dir.glob("source/custom_node_modules/**/*.js"))
+      },
+    }
+  },
+
+  web: {
+    intermediate_dir: "web_intermediate",
+
+    staging_dir: "web_staging",
+
+    log_dir: "web_logs",
+
+    trace_enabled: false,
+
+    trace_dir: "web_trace",
+
+    # vs_output_dir: "source/bin"
+    vs_output_dir: "web_intermediate/bin"
+  },
+})

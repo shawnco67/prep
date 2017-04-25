@@ -1,0 +1,8 @@
+source https://nuget.org/api/v2
+
+nuget Machine.Specifications = 0.11.0
+nuget Machine.Specifications.Runner.Console = 0.10.0-Unstable0005
+nuget Machine.Specifications.Runner.TDNet = 0.9.0
+nuget Machine.Specifications.Should = 0.11.0
+nuget Machine.Fakes.Rhinomocks = 2.8.0
+nuget developwithpassion.specifications = 0.7.3
