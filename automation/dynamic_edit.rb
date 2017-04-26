@@ -8,12 +8,16 @@ module Automation
 
     desc 'edit', 'edit files in a compile unit'
     def edit
-      unit = options[:compile_file] || pick_item_from(settings.compile_units, "Pick a compile unit to edit")
-      puts "Picked #{unit}"
+      unit = pick_item_from(settings.compile_units, "Pick a compile unit to edit")
+      edit_unit(unit)
+    end
+
+    desc 'unit', 'edit specific compile unit'
+    def unit(unit)
       FileUtils.cp(settings.edit_project_template, edit_file)
       unit = get_compile_unit(unit)
       configure(compile_unit: unit)
-      invoke 'automation:expand'
+      invoke 'automation:expand', []
       FileUtils.rm edit_file
     end
 
