@@ -27,14 +27,14 @@ namespace code.prep.movies
 
     public IEnumerable<Movie> all_movies_matching(MovieCriteria criteria)
     {
-      return movies.all_items_matching(criteria);
+      return movies.all_items_matching(new Criteria<Movie>(criteria));
     }
 
     public bool is_pixar_movie(Movie movie)
     {
       return movie.production_studio == ProductionStudio.Pixar;
     }
-
+       
     public IEnumerable<Movie> all_movies_published_by_pixar()
     {
       return all_movies_matching(x => x.production_studio == ProductionStudio.Pixar);
