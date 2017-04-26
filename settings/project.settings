@@ -160,7 +160,7 @@ configure({
 
     provider: 'github', #possible values [github, bitbucket]
 
-    remotes: %w//,
+    remotes: %w/eseely gebben ethanmoe shawnco67 nathantng xafrini is-lavanyapothineni danny0425 MattheJonesCo aboucherat DarryllErvin lorrychen pckistler TroyLBrown kaj/,
 
     repo: 'prep' 
   },
