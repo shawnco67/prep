@@ -13,7 +13,7 @@ module Automation
     end
 
     desc 'unit', 'edit specific compile unit'
-    def unit(unit)
+    def edit_unit(unit)
       FileUtils.cp(settings.edit_project_template, edit_file)
       unit = get_compile_unit(unit)
       configure(compile_unit: unit)
