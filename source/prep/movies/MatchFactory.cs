@@ -1,5 +1,5 @@
-﻿using System;
-using code.utility;
+﻿using code.utility;
+using code.utility.matching;
 
 namespace code.prep.movies
 {
@@ -19,15 +19,13 @@ namespace code.prep.movies
 
     public Criteria<Item> equal_to_any(params Property[] values)
     {
-            return x =>
-            {
-                foreach (Property p in values)
-                {
-                    if (accessor(x).Equals(p))
-                        return true;
-                }
-                return false;
-            };
+      return values.reduce(Criterias.never_matches<Item>(),
+        (accumulator, value) => accumulator.or(equal_to(value)));
+    }
+
+    public Criteria<Item> not_equal_to(Property value)
+    {
+      throw new System.NotImplementedException();
     }
   }
 }
