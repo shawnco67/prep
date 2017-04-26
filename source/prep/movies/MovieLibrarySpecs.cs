@@ -7,13 +7,13 @@ using developwithpassion.specifications.assertions.core;
 using developwithpassion.specifications.assertions.enumerables;
 using developwithpassion.specifications.assertions.type_specificity;
 using developwithpassion.specifications.extensions;
-using spec = developwithpassion.specifications.use_engine<Machine.Fakes.Adapters.Rhinomocks.RhinoFakeEngine>;
 using Machine.Specifications;
+using spec = developwithpassion.specifications.use_engine<Machine.Fakes.Adapters.Rhinomocks.RhinoFakeEngine>;
 
 namespace code.prep.movies
 {
   [Subject(typeof(MovieLibrary))]
-  public class MovieLibrarySpecs 
+  public class MovieLibrarySpecs
   {
     /* The following set of Context/Specification pairs are in place to specify the functionality that you need to complete for the MovieLibrary class.
    * MovieLibrary is an collection of Movie. It exposes the ability to search,sort, and iterate over all of the movies that it contains.
@@ -86,7 +86,6 @@ namespace code.prep.movies
 
       It returns_the_number_of_all_movies_in_the_library = () =>
         number_of_movies.ShouldEqual(2);
-        
     }
 
     public class asked_for_all_of_the_movies : movie_library_concern
@@ -194,9 +193,7 @@ namespace code.prep.movies
 
       It finds_all_movies_published_by_pixar = () =>
       {
-        var criteria = Match<Movie>
-          .with_attribute(x => x.production_studio)
-          .equal_to(ProductionStudio.Pixar);
+        var criteria = Match<Movie>.with_attribute(x => x.production_studio).equal_to(ProductionStudio.Pixar);
 
         var results = sut.all_movies().all_items_matching(criteria);
 
@@ -205,8 +202,7 @@ namespace code.prep.movies
 
       It finds_all_movies_published_by_pixar_or_disney = () =>
       {
-        var criteria = Movie.Criteria.published_by(ProductionStudio.Pixar)
-          .or(Movie.Criteria.published_by(ProductionStudio.Disney));
+        var criteria = Match<Movie>.with_attribute(x => x.production_studio).equal_to_any(ProductionStudio.Pixar,ProductionStudio.Disney);
 
         var results = sut.all_movies().all_items_matching(criteria);
 

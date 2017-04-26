@@ -1,14 +1,12 @@
-﻿using System;
+﻿using code.utility;
 
 namespace code.prep.movies
 {
-  public delegate ProductionStudio ITakeAMovieAndGetItsProductionStudio(Movie movie);
-
   public class Match<Item>
   {
-    public static ITakeAMovieAndGetItsProductionStudio with_attribute(ITakeAMovieAndGetItsProductionStudio accessor)
+    public static MatchFactory<Item,Property> with_attribute<Property>(IGetTheValueOfAProperty<Item, Property> accessor)
     {
-      return accessor;
+      return new MatchFactory<Item,Property>(accessor);
     }
   }
 }
