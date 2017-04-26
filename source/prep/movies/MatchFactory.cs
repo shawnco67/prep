@@ -19,7 +19,15 @@ namespace code.prep.movies
 
     public Criteria<Item> equal_to_any(params Property[] values)
     {
-      throw new NotImplementedException();
+            return x =>
+            {
+                foreach (Property p in values)
+                {
+                    if (accessor(x).Equals(p))
+                        return true;
+                }
+                return false;
+            };
     }
   }
 }
