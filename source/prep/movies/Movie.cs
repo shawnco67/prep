@@ -1,4 +1,6 @@
 using System;
+using code.utility;
+using code.utility.matching;
 
 namespace code.prep.movies
 {
@@ -13,9 +15,9 @@ namespace code.prep.movies
     public bool Equals(Movie other)
     {
       if (other == null) return false;
-      if (ReferenceEquals(this,other)) return true;
+      if (ReferenceEquals(this, other)) return true;
 
-      return this.title ==  other.title;
+      return this.title == other.title;
     }
 
     public override int GetHashCode()
@@ -26,6 +28,19 @@ namespace code.prep.movies
     public override bool Equals(object obj)
     {
       return Equals(obj as Movie);
+    }
+
+    public class Criteria
+    {
+      public static Criteria<Movie> published_by(ProductionStudio studio)
+      {
+        return x => x.production_studio == studio;
+      }
+
+      public static Criteria<Movie> not(Criteria<Movie> criteria)
+      {
+        return criteria.not();
+      }
     }
   }
 }

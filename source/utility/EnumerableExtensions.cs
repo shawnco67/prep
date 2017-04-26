@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using code.utility.matching;
 
 namespace code.utility
 {
@@ -14,6 +15,11 @@ namespace code.utility
       foreach (var m in items)
         if (criteria(m))
           yield return m;
+    }
+
+    public static IEnumerable<Item> all_items_matching<Item>(this IEnumerable<Item> items, IMatchAn<Item> criteria)
+    {
+      return items.all_items_matching(criteria.matches);
     }
   }
 }

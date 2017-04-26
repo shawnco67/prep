@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using code.utility;
+using code.utility.matching;
 using developwithpassion.specifications.assertions.core;
 using developwithpassion.specifications.assertions.enumerables;
 using developwithpassion.specifications.assertions.type_specificity;
@@ -192,21 +194,30 @@ namespace code.prep.movies
 
       It finds_all_movies_published_by_pixar = () =>
       {
-        var results = sut.all_movies_published_by_pixar();
+        var criteria = Match<Movie>
+          .with_attribute(x => x.production_studio)
+          .equal_to(ProductionStudio.Pixar);
+
+        var results = sut.all_movies().all_items_matching(criteria);
 
         results.ShouldContainOnly(cars, a_bugs_life);
       };
 
       It finds_all_movies_published_by_pixar_or_disney = () =>
       {
-        var results = sut.all_movies_published_by_pixar_or_disney();
+        var criteria = Movie.Criteria.published_by(ProductionStudio.Pixar)
+          .or(Movie.Criteria.published_by(ProductionStudio.Disney));
+
+        var results = sut.all_movies().all_items_matching(criteria);
 
         results.ShouldContainOnly(a_bugs_life, pirates_of_the_carribean, cars);
       };
 
       It finds_all_movies_not_published_by_pixar = () =>
       {
-        var results = sut.all_movies_not_published_by_pixar();
+        var criteria = Movie.Criteria.not(Movie.Criteria.published_by(ProductionStudio.Pixar));
+
+        var results = sut.all_movies().all_items_matching(criteria);
 
         results.ShouldNotContain(cars, a_bugs_life);
       };
