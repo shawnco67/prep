@@ -71,7 +71,6 @@ namespace code.prep.movies
       {
         movie_collection = new List<Movie>();
         depends.on(movie_collection);
-        depends.on<IFindMoviesUsingLegacyCrappyMechanics>(new FindMoviesUsingLegacyCrappyMechanics(movie_collection));
       };
     };
 
@@ -224,7 +223,7 @@ namespace code.prep.movies
 
       It finds_all_movies_published_after_a_certain_year = () =>
       {
-        var criteria = Match<Movie>.with_comparable_attribute(x => x.date_published.Year)
+        var criteria = Match<Movie>.with_attribute(x => x.date_published)
         .greater_than(2004);
 
         var results = sut.all_movies().all_items_matching(criteria);
@@ -234,7 +233,10 @@ namespace code.prep.movies
 
       It finds_all_movies_published_between_a_certain_range_of_years = () =>
       {
-        var results = sut.all_movies_published_between_years(1982, 2003);
+        var criteria = Match<Movie>.with_attribute(x => x.date_published.Year)
+       .between(1982, 2003);
+
+        var results = sut.all_movies().all_items_matching(criteria);
 
         results.ShouldContainOnly(indiana_jones_and_the_temple_of_doom, a_bugs_life, pirates_of_the_carribean);
       };
