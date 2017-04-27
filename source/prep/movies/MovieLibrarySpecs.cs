@@ -241,14 +241,18 @@ namespace code.prep.movies
 
       It finds_all_kid_movies = () =>
       {
-        var results = sut.all_kid_movies();
+        var criteria = Match<Movie>.with_attribute(x => x.genre).equal_to_any(Genre.kids);
+
+        var results = sut.all_movies().all_items_matching(criteria);
 
         results.ShouldContainOnly(a_bugs_life, shrek, cars);
       };
 
       It finds_all_action_movies = () =>
       {
-        var results = sut.all_action_movies();
+        var criteria = Match<Movie>.with_attribute(x => x.genre).equal_to_any(Genre.action);
+
+        var results = sut.all_movies().all_items_matching(criteria);
 
         results.ShouldContainOnly(indiana_jones_and_the_temple_of_doom, pirates_of_the_carribean);
       };
