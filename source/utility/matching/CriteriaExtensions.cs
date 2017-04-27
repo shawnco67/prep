@@ -8,9 +8,10 @@
       return x => left(x) || right(x);
     }
 
-    public static Criteria<Item> not<Item>(this Criteria<Item> left)
+    public static Criteria<Item> not<Item>(this Criteria<Item> to_negate)
     {
-      return x => !left(x);
+      return x => !to_negate(x);
     }
   }
+
 }

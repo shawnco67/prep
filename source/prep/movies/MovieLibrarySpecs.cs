@@ -71,6 +71,7 @@ namespace code.prep.movies
       {
         movie_collection = new List<Movie>();
         depends.on(movie_collection);
+        depends.on<IFindMoviesUsingLegacyCrappyMechanics>(new FindMoviesUsingLegacyCrappyMechanics(movie_collection));
       };
     };
 
@@ -193,7 +194,9 @@ namespace code.prep.movies
 
       It finds_all_movies_published_by_pixar = () =>
       {
-        var criteria = Match<Movie>.with_attribute(x => x.production_studio).equal_to(ProductionStudio.Pixar);
+        var criteria = Match<Movie>
+          .with_attribute(x => x.production_studio)
+          .equal_to(ProductionStudio.Pixar);
 
         var results = sut.all_movies().all_items_matching(criteria);
 
@@ -221,7 +224,10 @@ namespace code.prep.movies
 
       It finds_all_movies_published_after_a_certain_year = () =>
       {
-        var results = sut.all_movies_published_after(2004);
+        var criteria = Match<Movie>.with_comparable_attribute(x => x.date_published.Year)
+        .greater_than(2004);
+
+        var results = sut.all_movies().all_items_matching(criteria);
 
         results.ShouldContainOnly(yours_mine_and_ours, shrek, theres_something_about_mary);
       };

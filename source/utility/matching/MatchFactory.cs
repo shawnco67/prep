@@ -1,7 +1,4 @@
-﻿using code.utility;
-using code.utility.matching;
-
-namespace code.prep.movies
+﻿namespace code.utility.matching
 {
   public class MatchFactory<Item, Property>
   {
@@ -25,7 +22,8 @@ namespace code.prep.movies
 
     public Criteria<Item> not_equal_to(Property value)
     {
-            return x => !accessor(x).Equals(value);
-        }
+      return equal_to(value).not();
+    }
+
   }
 }

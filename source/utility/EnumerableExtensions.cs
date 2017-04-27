@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using code.utility.matching;
 
 namespace code.utility
 {
@@ -10,9 +9,11 @@ namespace code.utility
       foreach (var item in items) yield return item;
     }
 
-    public static IEnumerable<Output> map<Input, Output>(this IEnumerable<Input> items, IMapFrom<Input, Output> mapper)
+    public static IEnumerable<Item> all_items_matching<Item>(this IEnumerable<Item> items, Criteria<Item> criteria)
     {
-      foreach (var item in items) yield return mapper(item);
+      foreach (var item in items)
+        if (criteria(item))
+          yield return item;
     }
 
     public static Output reduce<Input, Output>(this IEnumerable<Input> items, Output initial_value, IReduce<Input, Output> reducer)
@@ -25,16 +26,5 @@ namespace code.utility
       return current_value;
     }
 
-    public static IEnumerable<Item> all_items_matching<Item>(this IEnumerable<Item> items, Criteria<Item> criteria)
-    {
-      foreach (var m in items)
-        if (criteria(m))
-          yield return m;
-    }
-
-    public static IEnumerable<Item> all_items_matching<Item>(this IEnumerable<Item> items, IMatchAn<Item> criteria)
-    {
-      return items.all_items_matching(criteria.matches);
-    }
   }
 }

@@ -1,6 +1,4 @@
-﻿using code.prep.movies;
-
-namespace code.utility.matching
+﻿namespace code.utility.matching
 {
   public class OrCriteria<Item> : IMatchAn<Item>
   {
@@ -16,6 +14,6 @@ namespace code.utility.matching
     public bool matches(Item item)
     {
       return left(item) || right(item);
-    } 
+    }
   }
 }
