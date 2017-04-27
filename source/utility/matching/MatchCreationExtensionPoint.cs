@@ -1,16 +1,29 @@
 namespace code.utility.matching
 {
-  public class MatchCreationExtensionPoint<Item, Property>
+  public class MatchCreationExtensionPoint<Item, Property> : IProvideAccessToMatchBuilders<Item, Property>
   {
     IGetTheValueOfAProperty<Item, Property> accessor;
-    bool negate; 
 
-    public MatchCreationExtensionPoint<Item, Property> not
+    public IProvideAccessToMatchBuilders<Item, Property> not
     {
       get
       {
-        negate = true;
-        return this;
+        return new NegatedExtensionPoint(this);
+      }
+    }
+
+    class NegatedExtensionPoint : IProvideAccessToMatchBuilders<Item, Property>
+    {
+      IProvideAccessToMatchBuilders<Item, Property> original;
+
+      public NegatedExtensionPoint(IProvideAccessToMatchBuilders<Item, Property> original)
+      {
+        this.original = original;
+      }
+
+      public Criteria<Item> create_using(Criteria<Property> property_matcher)
+      {
+        return original.create_using(property_matcher).not();
       }
     }
 
@@ -21,9 +34,7 @@ namespace code.utility.matching
 
     public Criteria<Item> create_using(Criteria<Property> property_matcher)
     {
-      Criteria<Item> specification = new PropertyMatcher<Item, Property>(this.accessor,property_matcher).matches;
-
-      return negate ? specification.not() : specification;
+      return new PropertyMatcher<Item, Property>(this.accessor,property_matcher).matches;
     }
   }
 }
